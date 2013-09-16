@@ -14,8 +14,7 @@
     <StartupObject>
     </StartupObject>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -237,6 +236,7 @@
     <Compile Include="Interfaces\General\IMergeable.cs" />
     <Compile Include="Interfaces\IICalendar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="key.snk" />
     <None Include="Properties\AssemblyInfo.cs.template" />
     <None Include="Serialization\iCalendar\iCal.g" />
     <Compile Include="Serialization\DataTypeMapper.cs" />
@@ -300,7 +300,8 @@
   -->
   <PropertyGroup>
     <!--    <PreBuildEvent>subwcrev.exe $(ProjectDir). $(ProjectDir)Properties\AssemblyInfo.cs.template $(ProjectDir)Properties\AssemblyInfo.cs</PreBuildEvent>
-    --><PostBuildEvent>
+    -->
+    <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
 </Project>
