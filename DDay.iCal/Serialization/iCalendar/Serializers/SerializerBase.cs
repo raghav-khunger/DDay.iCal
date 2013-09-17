@@ -75,6 +75,10 @@ namespace DDay.iCal.Serialization.iCalendar
 
             sw.Write(SerializeToString(obj));
 
+            // Clears all buffers for the current writer and causes any buffered data to be written to the underlying stream.
+            // The stream will remain open.
+            sw.Flush();
+
             // Pop the current encoding off the serialization stack
             encodingStack.Pop();
 
