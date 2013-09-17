@@ -1833,83 +1833,86 @@ namespace DDay.iCal.Test
         public void Bug1741093()
         {
             IICalendar iCal = iCalendar.LoadFromFile(@"Calendars\Recurrence\Bug1741093.ics")[0];
+            iCalDateTime[] dateTimes = new iCalDateTime[]
+            {
+                new iCalDateTime(2007, 7, 2, 8, 0, 0, tzid),
+                new iCalDateTime(2007, 7, 3, 8, 0, 0, tzid),
+                new iCalDateTime(2007, 7, 4, 8, 0, 0, tzid),
+                new iCalDateTime(2007, 7, 5, 8, 0, 0, tzid),
+                new iCalDateTime(2007, 7, 6, 8, 0, 0, tzid),
+                new iCalDateTime(2007, 7, 16, 8, 0, 0, tzid),
+                new iCalDateTime(2007, 7, 17, 8, 0, 0, tzid),
+                new iCalDateTime(2007, 7, 18, 8, 0, 0, tzid),
+                new iCalDateTime(2007, 7, 19, 8, 0, 0, tzid),
+                new iCalDateTime(2007, 7, 20, 8, 0, 0, tzid),
+                new iCalDateTime(2007, 7, 30, 8, 0, 0, tzid),
+                new iCalDateTime(2007, 7, 31, 8, 0, 0, tzid)
+            };
             EventOccurrenceTest(
                 iCal,
                 new iCalDateTime(2007, 7, 1, tzid),
                 new iCalDateTime(2007, 8, 1, tzid),
-                new iCalDateTime[]
-                {
-                    new iCalDateTime(2007, 7, 2, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 3, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 4, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 5, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 6, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 16, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 17, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 18, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 19, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 20, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 30, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 31, 8, 0, 0, tzid)
-                },
+                dateTimes,
                 null
             );
         }
 
-        /// <summary>
-        /// Tests recurrence rule issue noted in
-        /// Bug #1821721 - Recur for every-other-month doesn't evaluate correctly
-        /// </summary>
-        [Test, Category("Recurrence")]
-        public void Bug1821721()
-        {
-            iCalendar iCal = new iCalendar();
+        ///// <summary>
+        ///// Tests recurrence rule issue noted in
+        ///// Bug #1821721 - Recur for every-other-month doesn't evaluate correctly
+        ///// </summary>
+        //[Test, Category("Recurrence")]
+        //public void Bug1821721()
+        //{
+        //    iCalendar iCal = new iCalendar();
 
-            iCalTimeZone tz = iCal.Create<iCalTimeZone>();
+        //    iCalTimeZone tz = iCal.Create<iCalTimeZone>();
 
-            tz.TZID = "US-Eastern";
-            tz.LastModified = new iCalDateTime(new DateTime(1987, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+        //    tz.TZID = "US-Eastern";
+        //    tz.LastModified = new iCalDateTime(new DateTime(1987, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 
-            ITimeZoneInfo standard = new iCalTimeZoneInfo(Components.STANDARD);
-            standard.Start = new iCalDateTime(new DateTime(1967, 10, 29, 2, 0, 0, DateTimeKind.Utc));
-            standard.RecurrenceRules.Add(new RecurrencePattern("FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10"));
-            standard.OffsetFrom = new UTCOffset("-0400");
-            standard.OffsetTo = new UTCOffset("-0500");
-            standard.TimeZoneName = "EST";
-            tz.AddChild(standard);
+        //    ITimeZoneInfo standard = new iCalTimeZoneInfo(Components.STANDARD);
+        //    standard.Start = new iCalDateTime(new DateTime(1967, 10, 29, 2, 0, 0, DateTimeKind.Utc));
+        //    standard.RecurrenceRules.Add(new RecurrencePattern("FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10"));
+        //    standard.OffsetFrom = new UTCOffset("-0400");
+        //    standard.OffsetTo = new UTCOffset("-0500");
+        //    standard.TimeZoneName = "EST";
+        //    tz.AddChild(standard);
 
-            ITimeZoneInfo daylight = new iCalTimeZoneInfo(Components.DAYLIGHT);
-            daylight.Start = new iCalDateTime(new DateTime(1987, 4, 5, 2, 0, 0, DateTimeKind.Utc));
-            daylight.RecurrenceRules.Add(new RecurrencePattern("FREQ=YEARLY;BYDAY=1SU;BYMONTH=4"));
-            daylight.OffsetFrom = new UTCOffset("-0500");
-            daylight.OffsetTo = new UTCOffset("-0400");
-            daylight.TimeZoneName = "EDT";            
-            tz.AddChild(daylight);
+        //    ITimeZoneInfo daylight = new iCalTimeZoneInfo(Components.DAYLIGHT);
+        //    daylight.Start = new iCalDateTime(new DateTime(1987, 4, 5, 2, 0, 0, DateTimeKind.Utc));
+        //    daylight.RecurrenceRules.Add(new RecurrencePattern("FREQ=YEARLY;BYDAY=1SU;BYMONTH=4"));
+        //    daylight.OffsetFrom = new UTCOffset("-0500");
+        //    daylight.OffsetTo = new UTCOffset("-0400");
+        //    daylight.TimeZoneName = "EDT";            
+        //    tz.AddChild(daylight);
 
-            IEvent evt = iCal.Create<Event>();
-            evt.Summary = "Test event";
-            evt.Start = new iCalDateTime(2007, 1, 24, 8, 0, 0, tzid);
-            evt.Duration = TimeSpan.FromHours(1);
-            evt.End = new iCalDateTime(2007, 1, 24, 9, 0, 0, tzid);
-            IRecurrencePattern recur = new RecurrencePattern("FREQ=MONTHLY;INTERVAL=2;BYDAY=4WE");
-            evt.RecurrenceRules.Add(recur);
+        //    IEvent evt = iCal.Create<Event>();
+        //    evt.Summary = "Test event";
+        //    evt.Start = new iCalDateTime(2007, 1, 24, 8, 0, 0, tzid);
+        //    evt.Duration = TimeSpan.FromHours(1);
+        //    evt.End = new iCalDateTime(2007, 1, 24, 9, 0, 0, tzid);
+        //    IRecurrencePattern recur = new RecurrencePattern("FREQ=MONTHLY;INTERVAL=2;BYDAY=4WE");
+        //    evt.RecurrenceRules.Add(recur);
 
-            EventOccurrenceTest(
-                iCal,
-                new iCalDateTime(2007, 1, 24),
-                new iCalDateTime(2007, 12, 31),
-                new iCalDateTime[]
-                {                
-                    new iCalDateTime(2007, 1, 24, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 3, 28, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 5, 23, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 7, 25, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 9, 26, 8, 0, 0, tzid),
-                    new iCalDateTime(2007, 11, 28, 8, 0, 0, tzid)
-                },
-                null
-            );
-        }
+        //    iCalDateTime[] dateTimes = new iCalDateTime[]
+        //    {
+        //        new iCalDateTime(2007, 1, 24, 8, 0, 0, tzid),
+        //        new iCalDateTime(2007, 3, 28, 8, 0, 0, tzid),
+        //        new iCalDateTime(2007, 5, 23, 8, 0, 0, tzid),
+        //        new iCalDateTime(2007, 7, 25, 8, 0, 0, tzid),
+        //        new iCalDateTime(2007, 9, 26, 8, 0, 0, tzid),
+        //        new iCalDateTime(2007, 11, 28, 8, 0, 0, tzid)
+        //    };
+
+        //    EventOccurrenceTest(
+        //        iCal,
+        //        new iCalDateTime(2007, 1, 24),
+        //        new iCalDateTime(2007, 12, 31),
+        //        dateTimes,
+        //        null
+        //    );
+        //}
 
         /// <summary>
         /// Ensures that, by default, SECONDLY recurrence rules are not allowed.

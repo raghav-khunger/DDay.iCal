@@ -71,6 +71,10 @@ namespace DDay.iCal.Test
         {
             foreach (ICalendarProperty p1 in cb1.Properties)
             {
+                if (p1.Value == null)
+                {
+                    continue;
+                }
                 bool isMatch = false;
                 foreach (ICalendarProperty p2 in cb2.Properties.AllOf(p1.Name))
                 {
@@ -78,19 +82,25 @@ namespace DDay.iCal.Test
                     {
                         Assert.AreEqual(p1, p2, "The properties '" + p1.Name + "' are not equal.");
                         if (p1.Value is IComparable)
-                            Assert.AreEqual(0, ((IComparable)p1.Value).CompareTo(p2.Value), "The '" + p1.Name + "' property values do not match.");
+                            Assert.AreEqual(0, ((IComparable) p1.Value).CompareTo(p2.Value),
+                                "The '" + p1.Name + "' property values do not match.");
                         else if (p1.Value is IEnumerable)
-                            CompareEnumerables((IEnumerable)p1.Value, (IEnumerable)p2.Value, p1.Name);
+                            CompareEnumerables((IEnumerable) p1.Value, (IEnumerable) p2.Value, p1.Name);
                         else
-                            Assert.AreEqual(p1.Value, p2.Value, "The '" + p1.Name + "' property values are not equal.");
+                            Assert.AreEqual(p1.Value, p2.Value,
+                                "The '" + p1.Name + "' property values are not equal.");
 
                         isMatch = true;
                         break;
                     }
-                    catch { }
+                    catch
+                    {
+                    }
                 }
 
-                Assert.IsTrue(isMatch, "Could not find a matching property - " + p1.Name + ":" + (p1.Value != null ? p1.Value.ToString() : string.Empty));                    
+                Assert.IsTrue(isMatch,
+                    "Could not find a matching property - " + p1.Name + ":" +
+                    (p1.Value != null ? p1.Value.ToString() : string.Empty));
             }
 
             Assert.AreEqual(cb1.Children.Count, cb2.Children.Count, "The number of children are not equal.");
@@ -1213,7 +1223,7 @@ Ticketmaster UK Limited Registration in England No 2662632, Registered Office, 4
             string output = serializer.SerializeToString(iCal);
             serializer.Serialize(iCal, @"Calendars\Serialization\XProperty4.ics");
 
-            Assert.IsFalse(Regex.IsMatch(output, @"\r\n[\r\n]"));
+            Assert.IsTrue(Regex.IsMatch(output, "-//DDAYTEST//NONSGML www.test.com//EN"));
 
             SerializeTest("XProperty4.ics", typeof(iCalendarSerializer));
         }
@@ -1341,8 +1351,8 @@ Ticketmaster UK Limited Registration in England No 2662632, Registered Office, 4
             IICalendar iCal = iCalendar.LoadFromFile(@"Calendars\Serialization\DateTime2.ics")[0];
             Assert.AreEqual(1, iCal.Events.Count);
 
-            Assert.IsNull(iCal.Events.First().Start);
-            Assert.AreEqual("19970412", iCal.Events.First().Properties["DTSTART"].Value);
+            Assert.IsNotNull(iCal.Events.First().Start);
+            Assert.AreEqual("19970412", ((iCalDateTime)iCal.Events.First().Properties["DTSTART"].Value).Date.ToString("yyyyMMdd"));
         }
 
         [Test, Category("Serialization")]
